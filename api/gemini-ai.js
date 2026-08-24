@@ -2,6 +2,17 @@
 // Vercel serverless function (Node.js runtime).
 
 export default async function handler(req, res) {
+  // Allow your site to call this API from a different domain (CORS)
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // Browsers send a pre-flight OPTIONS request before the real POST
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed" });
     return;
